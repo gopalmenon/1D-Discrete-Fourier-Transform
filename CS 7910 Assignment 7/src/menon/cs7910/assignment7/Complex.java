@@ -47,15 +47,7 @@ public class Complex {
 			
 		return new Complex(realsProduct - imaginariesProduct, sumProduct - (realsProduct + imaginariesProduct));
 	}
-	
-	/**
-	 * @return the inverse of this complex number when it is a root of unity
-	 */
-	public Complex getInverseOfRootOfUnity() {
-		
-		return new Complex(this.real, -this.imaginary);
-		
-	}
+
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -71,30 +63,6 @@ public class Complex {
 		returnValue.append("j");
 		
 		return returnValue.toString();
-		
-	}
-	
-	/**
-	 * @param exponent
-	 * @return the roots of unity as an array of complex numbers
-	 */
-	public static Complex[] getRootsOfUnity(int exponent) {
-		
-		Complex[] returnValue = new Complex[exponent];
-		
-		//Find the angle for the first root of unity
-		double complexNumberAngle = 2* Math.PI / exponent;
-		
-		//Find the first and last roots of unity
-		returnValue[0] = new Complex(1, 0);
-		Complex increment = new Complex(Math.cos(complexNumberAngle), Math.sin(complexNumberAngle));
-		
-		//Find the rest by multiplying the previous one with the first one
-		for (int index = 1; index < exponent; ++index) {
-			returnValue[index] = new Complex(returnValue[index - 1].real, returnValue[index - 1].imaginary).multiply(increment);
-		}
-		
-		return returnValue;
 		
 	}
 
