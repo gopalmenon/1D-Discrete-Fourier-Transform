@@ -73,6 +73,16 @@ public class Complex {
 		return new Complex(realsProduct - imaginariesProduct, sumProduct - (realsProduct + imaginariesProduct));
 	}
 	
+	/**
+	 * @param divisor
+	 * @return complex after dividing by  a real divisor
+	 */
+	public Complex divide(double divisor) {
+		
+		return new Complex(this.real / divisor, this.imaginary / divisor);
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 * return a string representation of the complex number
@@ -98,6 +108,12 @@ public class Complex {
 
 	public double getImaginary() {
 		return imaginary;
+	}
+	
+	public double getAbsoluteValue() {
+		
+		return Math.sqrt(Math.pow(this.real, 2) + Math.pow(this.imaginary, 2));
+		
 	}
 	
 }

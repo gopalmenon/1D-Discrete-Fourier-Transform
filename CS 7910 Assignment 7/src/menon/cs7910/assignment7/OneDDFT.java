@@ -2,6 +2,7 @@ package menon.cs7910.assignment7;
 
 public class OneDDFT {
 	
+	public static final int POSITIVE_SIGN = -1;
 	public static final int NEGATIVE_SIGN = -1;
 	
 	/**
@@ -23,20 +24,21 @@ public class OneDDFT {
 		
 	} 
 	
-	/**
-	 * @param N
-	 * @param sign
-	 * @param thresh
-	 * @return two dimensional array of complex numbers containing the complex sinusoids for doing DFT
-	 */
-	public static Complex[][] computeDFTMat(int N, int sign, double thresh) {
+	private static Complex[][] computeDFTAndInverseDFTMatrix(int N, int sign, double thresh, boolean inverseDft) {
+		
+		int signToUse = 0;
+		if (inverseDft) {
+			signToUse = NEGATIVE_SIGN * sign;
+		} else {
+			signToUse = sign;
+		}
 		
 		Complex[][] returnValue = new Complex[N][N];
 		
 		for (int kthSinusoidIndex = 0; kthSinusoidIndex < N; ++kthSinusoidIndex) {
 			for (int sinusoidComponentIndex = 0; sinusoidComponentIndex < N; ++sinusoidComponentIndex) {
 				
-				returnValue[kthSinusoidIndex][sinusoidComponentIndex] = kthComplexSinusoidAt(kthSinusoidIndex, sinusoidComponentIndex, N, sign, thresh);
+				returnValue[kthSinusoidIndex][sinusoidComponentIndex] = kthComplexSinusoidAt(kthSinusoidIndex, sinusoidComponentIndex, N, signToUse, thresh);
 				
 			}
 		}
@@ -45,6 +47,17 @@ public class OneDDFT {
 		
 	}
 	
+	/**
+	 * @param N
+	 * @param sign
+	 * @param thresh
+	 * @return two dimensional array of complex numbers containing the complex sinusoids for doing DFT
+	 */
+	public static Complex[][] computeDFTMat(int N, int sign, double thresh) {
+		
+		return computeDFTAndInverseDFTMatrix(N, sign, thresh, false);
+		
+	}
 	
 	/**
 	 * @param signal
@@ -54,7 +67,6 @@ public class OneDDFT {
 	 */
 	public static Complex[] computeSpectrum(Complex[] signal, int sign, double thresh) {
 		
-
 		Complex[][] dftMatrix = computeDFTMat(signal.length, sign, thresh);
 		
 		Complex kthFrequencyElement = null;
@@ -71,24 +83,71 @@ public class OneDDFT {
 			returnValue[kthSinusoidIndex] = kthFrequencyElement;
 		
 		}
+		
 		return returnValue;
 
 	}
 	
 	public static double[] computeAbsoluteSpectrum(Complex[] signal, int sign, double thresh) {
-		return null;
+		
+		Complex[] spectrum = computeSpectrum(signal, sign, thresh);
+		
+		double[] returnValue = new double[spectrum.length];
+		
+		int absoluteSpectrumIndex = 0;
+		for (Complex complexComponent : spectrum) {
+			
+			returnValue[absoluteSpectrumIndex++] = complexComponent.getAbsoluteValue();
+			
+		}
+
+		return returnValue;
 	}
 	
 	public static Complex[][] computeInverseDFTMat(int N, int sign, double thresh) {
-		return null;
+		
+		return computeDFTAndInverseDFTMatrix(N, sign, thresh, true);
+		
 	}
 	
 	public static Complex[] invertSpectrum(Complex[] spectrum, double thresh) {
-		return null;
+		
+		int spectrumLength = spectrum.length;
+		
+		Complex[][] inverseDftMatrix = computeInverseDFTMat(spectrumLength, NEGATIVE_SIGN, thresh);
+		
+		Complex kthFrequencyElement = null;
+		Complex[] returnValue = new Complex[spectrumLength];
+		for (int kthSinusoidIndex = 0; kthSinusoidIndex < spectrumLength; ++kthSinusoidIndex) {
+			
+			kthFrequencyElement = Complex.valueOf(0.0, 0.0);
+			for (int signalIndex = 0; signalIndex < spectrumLength; ++signalIndex) {
+				
+				kthFrequencyElement = kthFrequencyElement.add(spectrum[signalIndex].multiply(inverseDftMatrix[kthSinusoidIndex][signalIndex]));
+				
+			}
+			
+			returnValue[kthSinusoidIndex] = kthFrequencyElement.divide(spectrumLength);
+		
+		}
+		
+		return returnValue;
 	}
 	
 	public static double[] invertSpectrumIntoMagnitudes(Complex[] spectrum, double thresh) {
-		return null;
+		
+		Complex[] invertedSpectrum = invertSpectrum(spectrum, thresh);
+		
+		double[] returnValue = new double[invertedSpectrum.length];
+		
+		int absoluteInvertedSpectrumIndex = 0;
+		for (Complex complexComponent : invertedSpectrum) {
+			
+			returnValue[absoluteInvertedSpectrumIndex++] = complexComponent.getAbsoluteValue();
+			
+		}
+
+		return returnValue;
 	}
 	
 	/**
