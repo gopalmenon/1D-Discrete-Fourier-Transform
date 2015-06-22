@@ -16,6 +16,31 @@ public class Complex {
 	}
 	
 	/**
+	 * Constructor
+	 * @param real
+	 * @param imaginary
+	 * @param threshold
+	 */
+	public Complex(double real, double imaginary, double threshold) {
+		
+		if (Math.abs(real) < threshold) {
+			this.real = 0.0;
+		} else {
+			this.real = real;
+		}
+
+		if (Math.abs(imaginary) < threshold) {
+			this.imaginary = 0.0;
+		} else {
+			this.imaginary = imaginary;
+		}
+	}
+
+	public static Complex valueOf(double real, double imaginary) {
+		return new Complex(real, imaginary);
+	}
+	
+	/**
 	 * @param complexToAdd
 	 * @return a complex number that is the result of adding this and another complex number
 	 */
@@ -47,7 +72,6 @@ public class Complex {
 			
 		return new Complex(realsProduct - imaginariesProduct, sumProduct - (realsProduct + imaginariesProduct));
 	}
-
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -57,10 +81,12 @@ public class Complex {
 		
 		StringBuffer returnValue = new StringBuffer();
 		
+		returnValue.append("(");
 		returnValue.append(this.real);
 		returnValue.append(" + ");
 		returnValue.append(this.imaginary);
-		returnValue.append("j");
+		returnValue.append("i");
+		returnValue.append(")");
 		
 		return returnValue.toString();
 		
