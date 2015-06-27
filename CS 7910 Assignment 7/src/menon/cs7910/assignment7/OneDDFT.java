@@ -2,7 +2,7 @@ package menon.cs7910.assignment7;
 
 public class OneDDFT {
 	
-	public static final int POSITIVE_SIGN = -1;
+	public static final int POSITIVE_SIGN = 1;
 	public static final int NEGATIVE_SIGN = -1;
 	
 	/**
@@ -76,7 +76,7 @@ public class OneDDFT {
 			kthFrequencyElement = Complex.valueOf(0.0, 0.0);
 			for (int signalIndex = 0; signalIndex < signal.length; ++signalIndex) {
 				
-				kthFrequencyElement = kthFrequencyElement.add(signal[signalIndex].multiply(dftMatrix[kthSinusoidIndex][signalIndex]));
+				kthFrequencyElement = kthFrequencyElement.add(signal[signalIndex].multiply(dftMatrix[kthSinusoidIndex][signalIndex], thresh));
 				
 			}
 			
@@ -123,11 +123,11 @@ public class OneDDFT {
 			kthFrequencyElement = Complex.valueOf(0.0, 0.0);
 			for (int signalIndex = 0; signalIndex < spectrumLength; ++signalIndex) {
 				
-				kthFrequencyElement = kthFrequencyElement.add(spectrum[signalIndex].multiply(inverseDftMatrix[kthSinusoidIndex][signalIndex]));
+				kthFrequencyElement = kthFrequencyElement.add(spectrum[signalIndex].multiply(inverseDftMatrix[kthSinusoidIndex][signalIndex], thresh));
 				
 			}
 			
-			returnValue[kthSinusoidIndex] = kthFrequencyElement.divide(spectrumLength);
+			returnValue[kthSinusoidIndex] = kthFrequencyElement.divide(spectrumLength, thresh);
 		
 		}
 		
